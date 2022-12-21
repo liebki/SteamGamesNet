@@ -6,6 +6,5 @@
         {
             return SteamRequestManager.GetAppData(steamappid, language, useragent);
         }
-
     }
 }

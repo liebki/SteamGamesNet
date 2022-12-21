@@ -9,13 +9,13 @@
     <Company>kmliebl</Company>
     <Description>A wrapper, to get all (possible) informations about apps/games using the ID, which will be supplied as AppObject to easily access data without parsing.</Description>
     <Copyright>kmliebl</Copyright>
-    <PackageProjectUrl>github.com/liebki/SteamGamesNet</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/liebki/SteamGamesNet</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>github.com/liebki/SteamGamesNet</RepositoryUrl>
+    <RepositoryUrl>https://github.com/liebki/SteamGamesNet</RepositoryUrl>
     <PackageTags>steam, games</PackageTags>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
     <Title>SteamGamesNet</Title>
   </PropertyGroup>
 

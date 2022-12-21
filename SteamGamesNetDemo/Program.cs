@@ -4,7 +4,7 @@ namespace SteamGamesNetDemo
 {
     public class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             //Epic Roller Coasters (VR)
             int ExampleSteamAppId = 787790;
@@ -12,7 +12,7 @@ namespace SteamGamesNetDemo
             //Wrong (not existing) id
             int ExampleCorruptSteamAppId = 899998;
 
-            RawSteamGame ExampleApp = SteamGamesClient.GetAppData(ExampleSteamAppId, "", "");
+            RawSteamGame ExampleApp = SteamGamesClient.GetAppData(ExampleSteamAppId);
             if (ExampleApp != null)
             {
                 Console.WriteLine("Example output:");

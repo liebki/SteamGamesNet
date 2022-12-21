@@ -4,8 +4,9 @@ namespace SteamGamesNet
 {
     internal static class SteamRequestManager
     {
-        const string SteamApiUrl = "https://store.steampowered.com/api/appdetails/?";
-        static string HttpUserAgent = "Mozilla/5.0 (Windows; U; Windows NT 10.0; en-US; Valve Steam GameOverlay/1639697812; ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36";
+        private const string SteamApiUrl = "https://store.steampowered.com/api/appdetails/?";
+        private static string HttpUserAgent = "Mozilla/5.0 (Windows; U; Windows NT 10.0; en-US; Valve Steam GameOverlay/1639697812; ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36";
+
         public static RawSteamGame GetAppData(int steamappid, string language = "", string useragent = "")
         {
             string SteamApiAppRequestUrl = SteamApiUrl;
@@ -41,7 +42,7 @@ namespace SteamGamesNet
             {
                 if (!string.IsNullOrEmpty(useragent) && useragent.Length > 3)
                 {
-                    HttpUserAgent= useragent;
+                    HttpUserAgent = useragent;
                 }
 
                 client.DefaultRequestHeaders.Add("User-Agent", HttpUserAgent);
