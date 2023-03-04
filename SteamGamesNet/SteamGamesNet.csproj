@@ -5,17 +5,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Authors>kmliebl</Authors>
-    <Company>kmliebl</Company>
-    <Description>A wrapper, to get all (possible) informations about apps/games using the ID, which will be supplied as AppObject to easily access data without parsing.</Description>
-    <Copyright>kmliebl</Copyright>
+    <Authors>liebki</Authors>
+    <Company>liebki</Company>
+    <Description>Get all game related informations using the app id or get all installed games that are found on a device.</Description>
+    <Copyright>liebki</Copyright>
     <PackageProjectUrl>https://github.com/liebki/SteamGamesNet</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/liebki/SteamGamesNet</RepositoryUrl>
-    <PackageTags>steam, games</PackageTags>
+    <PackageTags>steam, games, crawler</PackageTags>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <Version>0.0.2</Version>
+    <Version>0.0.3</Version>
     <Title>SteamGamesNet</Title>
   </PropertyGroup>
 

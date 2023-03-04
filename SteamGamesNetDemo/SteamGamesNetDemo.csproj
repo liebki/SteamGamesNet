@@ -4,8 +4,11 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
 	<ImplicitUsings>enable</ImplicitUsings>
-	<Version>0.0.2</Version>
+	<Version>0.0.3</Version>
     <Nullable>enable</Nullable>
+    <Company>liebki</Company>
+    <Authors>liebki</Authors>
+    <Copyright>liebki</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

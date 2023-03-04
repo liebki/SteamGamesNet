@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SteamGamesNet
+namespace SteamGamesNet.Models
 {
     public partial class RawSteamGame
     {

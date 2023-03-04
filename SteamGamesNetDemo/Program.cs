@@ -1,4 +1,5 @@
 ﻿using SteamGamesNet;
+using SteamGamesNet.Models;
 
 namespace SteamGamesNetDemo
 {
@@ -6,13 +7,12 @@ namespace SteamGamesNetDemo
     {
         private static void Main(string[] args)
         {
-            //Epic Roller Coasters (VR)
+            SteamGamesClient SgC = new();
             int ExampleSteamAppId = 787790;
 
-            //Wrong (not existing) id
             int ExampleCorruptSteamAppId = 899998;
+            RawSteamGame ExampleApp = SgC.GetAppData(ExampleSteamAppId);
 
-            RawSteamGame ExampleApp = SteamGamesClient.GetAppData(ExampleSteamAppId);
             if (ExampleApp != null)
             {
                 Console.WriteLine("Example output:");
@@ -23,15 +23,14 @@ namespace SteamGamesNetDemo
                 Console.WriteLine("This app obviously doesn't exist, the id is wrong or something else is not working correctly!");
             }
 
-            RawSteamGame ExampleCorruptApp = SteamGamesClient.GetAppData(ExampleCorruptSteamAppId);
-            if (ExampleCorruptApp != null)
+            int[] SteamIdList = SgC.GetAllSteamGameIds();
+            if (SteamIdList.Length > 0)
             {
-                Console.WriteLine("Example corrupt output:");
-                Console.WriteLine(ExampleCorruptApp.Data.ToString());
+                SteamIdList.ToList().ForEach(SteamGameId => Console.WriteLine(SteamGameId));
             }
             else
             {
-                Console.WriteLine("This app obviously doesn't exist, the id is wrong or something else is not working correctly!");
+                Console.WriteLine("No games found on this device");
             }
         }
     }

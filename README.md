@@ -7,15 +7,15 @@ A wrapper, to get all (possible) informations about apps/games using the ID, whi
 - .NET Core 6.0
 
 ### Nugets/Dependencies used
-- Newtonsoft.Json
+- [Newtonsoft.Json](https://www.nuget.org/packages/Newtonsoft.Json/)
 
 ## Features
 
 ### Nuget
-- A nuget package exists here: https://www.nuget.org/packages/SteamGamesNet
+- A nuget package exists here: [SteamGamesNet](https://www.nuget.org/packages/SteamGamesNet)
 
 ### General
-- Get a "RawSteamGame" object, which has following (sometimes optional) fields
+- Get a "[RawSteamGame](https://github.com/liebki/SteamGamesNet/blob/master/SteamGamesNet/Models/RawSteamGame.cs)" object, which has following (sometimes optional) fields
 	- Data (to access the main data and the most valuable informations)
 		- Type of app
 		- name of app
@@ -47,52 +47,49 @@ A wrapper, to get all (possible) informations about apps/games using the ID, whi
 
 ## Example
 
+#### Constructor parameters for optional change of language/useragent
+
+``` SteamGamesClient(string language = "", string useragent = "") ```
+
+#### Get all installed steamapps on the device (WIN only)
+
+``` GetAllSteamGameIds() ```
+
 ```
-//Epic Roller Coasters (VR)
+SteamGamesClient SgC = new();
+int[] SteamIdList = SgC.GetAllSteamGameIds();
+
+if (SteamIdList.Length > 0)
+{
+    SteamIdList.ToList().ForEach(SteamGameId => Console.WriteLine(SteamGameId));
+}
+else
+{
+    Console.WriteLine("No games found on this device");
+}
+```
+
+#### Get app data using an appid
+
+``` GetAppData() ```
+
+```
+SteamGamesClient SgC = new();
 int ExampleSteamAppId = 787790;
 
-//Wrong (not existing) id
 int ExampleCorruptSteamAppId = 899998;
+RawSteamGame ExampleApp = SgC.GetAppData(ExampleSteamAppId);
 
-RawSteamGame ExampleApp = SteamGamesClient.GetAppData(ExampleSteamAppId, "", "");
 if (ExampleApp != null)
 {
-	Console.WriteLine("Example output:");
-	Console.WriteLine(ExampleApp.Data.ToString());
+    Console.WriteLine("Example output:");
+    Console.WriteLine(ExampleApp.Data.ToString());
 }
 else
 {
-	Console.WriteLine("This app obviously doesn't exist, the id is wrong or something else is not working correctly!");
-}
-
-RawSteamGame ExampleCorruptApp = SteamGamesClient.GetAppData(ExampleCorruptSteamAppId);
-if (ExampleCorruptApp != null)
-{
-	Console.WriteLine("Example corrupt output:");
-	Console.WriteLine(ExampleCorruptApp.Data.ToString());
-}
-else
-{
-	Console.WriteLine("This app obviously doesn't exist, the id is wrong or something else is not working correctly!");
+    Console.WriteLine("This app obviously doesn't exist, the id is wrong or something else is not working correctly!");
 }
 ```
-
-### Optional parameters
-
-#### Custom language
-- SteamGamesClient.GetAppData(ExampleSteamAppId, language:"german");
-
-#### Custom useragent
-- SteamGamesClient.GetAppData(ExampleSteamAppId, useragent:"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0");
-
-#### Both (language > useragent)
-- SteamGamesClient.GetAppData(ExampleSteamAppId, "german", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0");
-
-## FAQ
-
-#### Does this work on every OS?
-
-I created this on windows 10 and tested it on other windows 10 machines, I cant guarantee anything for other operating systems or versions. But it should work everywhere, where .NET Core 5-7 works.
 
 ## License
 
@@ -106,6 +103,9 @@ I created this on windows 10 and tested it on other windows 10 machines, I cant 
 
 ## Roadmap
 
+- Implement a method
+	- To get the app data using the name
+	- To get the app id using the name
 - More to come..
 
 ## DISCLAIMER SECTION
