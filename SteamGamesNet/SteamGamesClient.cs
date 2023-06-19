@@ -19,21 +19,42 @@ namespace SteamGamesNet
             }
         }
 
-        public RawSteamGame GetAppData(int steamappid)
+        public async Task<RawSteamGame> GetAppDataAsync(int steamappid)
         {
-            return SteamRequestManager.GetAppData(steamappid, Lang_, Useragent_);
+            return await SteamRequestManager.GetAppDataAsync(steamappid, Lang_, Useragent_);
         }
 
-        public int[] GetAllSteamGameIds(string CustomPath = "")
+        public int[] GetActiveDownloadedGames(string CustomPath = "")
         {
-            Utils.OsWinCheck();
+            Utils.CheckIfWindows();
+            string SteamInstallationPath = SteamDirectoryPathSelection(CustomPath);
 
+            SteamInstallationPath = Path.Combine(SteamInstallationPath, "steamapps\\downloading\\");
+            return SteamRequestManager.GetActiveDownloadedGames(SteamInstallationPath);
+        }
+
+        public async Task<List<RawSteamGame>> GetActiveDownloadedGamesWithInfoAsync(string CustomPath = "")
+        {
+            Utils.CheckIfWindows();
+            string SteamInstallationPath = SteamDirectoryPathSelection(CustomPath);
+
+            SteamInstallationPath = Path.Combine(SteamInstallationPath, "steamapps\\downloading\\");
+            return await SteamRequestManager.GetActiveDownloadedGamesWithInfoAsync(SteamInstallationPath);
+        }
+
+        public async Task<List<SteamSignatureValue>> SteamFilesWithSignatures(string CustomPath = "")
+        {
+            string SteamInstallationPath = SteamDirectoryPathSelection(CustomPath);
+            return await SteamRequestManager.SteamFilesWithSignatures(SteamInstallationPath);
+        }
+
+        private static string SteamDirectoryPathSelection(string CustomPath)
+        {
             string SteamInstallationPath = string.Empty;
-            List<int> SteamAppIdList = new();
 
             if (string.IsNullOrEmpty(CustomPath))
             {
-                if (Utils.IsSteamInRegistry())
+                if (Utils.IsSteamInstalled())
                 {
                     SteamInstallationPath = Utils.GetSteamRegistryInstallPath();
                 }
@@ -42,6 +63,16 @@ namespace SteamGamesNet
             {
                 SteamInstallationPath = CustomPath;
             }
+
+            return SteamInstallationPath;
+        }
+
+        public int[] GetAllSteamGameIds(string CustomPath = "")
+        {
+            Utils.CheckIfWindows();
+            List<int> SteamAppIdList = new();
+
+            string SteamInstallationPath = SteamDirectoryPathSelection(CustomPath);
 
             foreach (string file in Directory.GetFiles(Path.Combine(SteamInstallationPath, "steamapps"), "appmanifest_*.acf"))
             {

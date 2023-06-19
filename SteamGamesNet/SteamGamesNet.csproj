@@ -7,20 +7,28 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>liebki</Authors>
     <Company>liebki</Company>
-    <Description>Get all game related informations using the app id or get all installed games that are found on a device.</Description>
+    <Description>Get game related informations and more using the app id's, get all installed games or steam informations that are found on the device.</Description>
     <Copyright>liebki</Copyright>
     <PackageProjectUrl>https://github.com/liebki/SteamGamesNet</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/liebki/SteamGamesNet</RepositoryUrl>
-    <PackageTags>steam, games, crawler</PackageTags>
+    <PackageTags>steam, games, crawler, valve, gaming</PackageTags>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <Version>0.0.3</Version>
+    <Version>0.0.4</Version>
     <Title>SteamGamesNet</Title>
+    <PackageReleaseNotes>Renamed asynchronous methods for clarity, Added GetActiveDownloadedGames() and GetActiveDownloadedGamesWithInfoAsync() methods, Introduced SteamFilesWithSignatures() method, Upgraded Newtonsoft.Json to version 13.0.3.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>

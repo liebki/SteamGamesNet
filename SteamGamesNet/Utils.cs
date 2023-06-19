@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.Win32;
+using System.Security;
 using System.Runtime.InteropServices;
 
 namespace SteamGamesNet
@@ -9,34 +10,46 @@ namespace SteamGamesNet
     {
         private const string SteamRegistryPath = @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Valve\Steam";
 
-        internal static void OsWinCheck()
+        internal static void CheckIfWindows()
         {
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                PlatformNotSupportedException WinOnly = new($"The platform {RuntimeInformation.OSArchitecture} is not supported, WIN only because of the need to access the registry!");
-                throw WinOnly;
+                throw new PlatformNotSupportedException("This function is only supported on Windows.");
             }
         }
 
         internal static int StripAcfFilename(string fileinput)
         {
-            string SteamId = fileinput;
-            SteamId = SteamId.Replace("appmanifest_", string.Empty);
-            SteamId = SteamId.Replace(".acf", string.Empty);
-            return int.Parse(SteamId);
-        }
-
-        internal static bool IsSteamInRegistry()
-        {
-            bool InstallationGefunden = true;
-            string SteamInstallationsPfad = (string)Registry.GetValue(SteamRegistryPath, "InstallPath", null);
-
-            if (string.IsNullOrEmpty(SteamInstallationsPfad))
+            try
             {
-                InstallationGefunden = false;
+                string fileName = Path.GetFileNameWithoutExtension(fileinput);
+                string steamId = fileName.Replace("appmanifest_", string.Empty);
+
+                return int.Parse(steamId);
             }
-            return InstallationGefunden;
+            catch (FormatException ex)
+            {
+                throw new ArgumentException("Invalid file path specified. Unable to extract Steam ID.", ex);
+            }
         }
+
+        internal static bool IsSteamInstalled()
+        {
+            try
+            {
+                string steamInstallationPath = (string)Registry.GetValue(SteamRegistryPath, "InstallPath", null);
+                return !string.IsNullOrEmpty(steamInstallationPath);
+            }
+            catch (SecurityException ex)
+            {
+                throw new Exception("Access to the registry key is denied. Please run this application with elevated privileges.", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while accessing the registry key. Please make sure that Steam is installed.", ex);
+            }
+        }
+
         internal static string GetSteamRegistryInstallPath()
         {
             return (string)Registry.GetValue(SteamRegistryPath, "InstallPath", null);

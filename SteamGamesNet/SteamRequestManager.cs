@@ -7,8 +7,9 @@ namespace SteamGamesNet
     {
         private const string SteamApiUrl = "https://store.steampowered.com/api/appdetails/?";
         private static string HttpUserAgent = "Mozilla/5.0 (Windows; U; Windows NT 10.0; en-US; Valve Steam GameOverlay/1639697812; ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36";
+        private static readonly HttpClient HttpClient = new();
 
-        public static RawSteamGame GetAppData(int steamappid, string language = "", string useragent = "")
+        internal static async Task<RawSteamGame> GetAppDataAsync(int steamappid, string language = "", string useragent = "")
         {
             string SteamApiAppRequestUrl = SteamApiUrl;
             if (!string.IsNullOrEmpty(language) && language.Length > 3)
@@ -17,43 +18,108 @@ namespace SteamGamesNet
             }
 
             SteamApiAppRequestUrl += $"appids={steamappid}";
-            string JsonResponse = QuerySteam(SteamApiAppRequestUrl, useragent);
+            string jsonResponse = await QuerySteamAsync(SteamApiAppRequestUrl, useragent);
 
             RawSteamGame gameData = null;
-            if (!JsonResponse.Contains("success\":false"))
+            if (!jsonResponse.Contains("success\":false"))
             {
-                Dictionary<string, RawSteamGame> dict = new();
                 try
                 {
-                    dict = JsonConvert.DeserializeObject<Dictionary<string, RawSteamGame>>(JsonResponse);
+                    Dictionary<string, RawSteamGame> dict = JsonConvert.DeserializeObject<Dictionary<string, RawSteamGame>>(jsonResponse);
+                    gameData = dict[steamappid.ToString()];
                 }
                 catch (Exception)
                 {
                     throw new($"Couldn't get data for {steamappid}, app is probably not supplied right from steam.");
                 }
-                gameData = dict[steamappid.ToString()];
             }
+
             return gameData;
         }
 
-        private static string QuerySteam(string url, string useragent = "")
+        private static async Task<string> QuerySteamAsync(string url, string useragent = "")
         {
-            string JsonResponse = string.Empty;
-            using (HttpClient client = new())
+            if (!string.IsNullOrEmpty(useragent) && useragent.Length > 3)
             {
-                if (!string.IsNullOrEmpty(useragent) && useragent.Length > 3)
-                {
-                    HttpUserAgent = useragent;
-                }
-
-                client.DefaultRequestHeaders.Add("User-Agent", HttpUserAgent);
-                HttpResponseMessage response = client.GetAsync(url).GetAwaiter().GetResult();
-
-                response.EnsureSuccessStatusCode();
-                JsonResponse = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                HttpUserAgent = useragent;
             }
 
-            return JsonResponse;
+            HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd(HttpUserAgent);
+            HttpResponseMessage response = await HttpClient.GetAsync(url);
+
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        internal static int[] GetActiveDownloadedGames(string path)
+        {
+            List<int> IdList = new();
+
+            foreach (string dir in Directory.EnumerateDirectories(path))
+            {
+                DirectoryInfo directoryInfo = new(dir);
+                bool IsParseable = int.TryParse(directoryInfo.Name, out int AppId);
+
+                if (IsParseable)
+                {
+                    IdList.Add(AppId);
+                }
+            }
+
+            return IdList.ToArray();
+        }
+
+        internal static async Task<List<SteamSignatureValue>> SteamFilesWithSignatures(string CustomPath)
+        {
+            string[] SignatureFileContent;
+            List<SteamSignatureValue> SteamFiles = new();
+
+            string SteamSignatureFilePath = Path.Combine(CustomPath, "steam.signatures");
+            if (File.Exists(SteamSignatureFilePath))
+            {
+                SignatureFileContent = await File.ReadAllLinesAsync(SteamSignatureFilePath);
+                if (SignatureFileContent.Length > 0)
+                {
+                    foreach (string file in SignatureFileContent)
+                    {
+                        if (!string.IsNullOrWhiteSpace(file))
+                        {
+                            if (!file.StartsWith("DIGEST:"))
+                            {
+                                string[] GeneralContent = file.Split("~");
+                                string FilePath = Path.Combine(CustomPath, GeneralContent[0].Replace("...\\", string.Empty));
+
+                                string[] HashContentAlgoName = GeneralContent[1].Split(":");
+                                string[] HashContentValue = HashContentAlgoName[1].Split(";");
+
+                                SteamSignatureValue ShaDigest = new(FilePath, HashContentAlgoName[0], HashContentValue[0], HashContentAlgoName[2], false);
+                                SteamFiles.Add(ShaDigest);
+                            }
+                            else
+                            {
+                                SteamSignatureValue ShaDigest = new(string.Empty, string.Empty, file.Replace("DIGEST:", string.Empty), string.Empty, true);
+                                SteamFiles.Add(ShaDigest);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return SteamFiles;
+        }
+
+        internal static async Task<List<RawSteamGame>> GetActiveDownloadedGamesWithInfoAsync(string path)
+        {
+            int[] IdList = GetActiveDownloadedGames(path);
+            List<RawSteamGame> SteamGameList = new();
+
+            foreach (int AppId in IdList)
+            {
+                RawSteamGame rawSteamGame = await GetAppDataAsync(AppId);
+                SteamGameList.Add(rawSteamGame);
+            }
+
+            return SteamGameList;
         }
     }
 }
