@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Linq;
-using Microsoft.Win32;
-using System.Security;
 using System.Runtime.InteropServices;
+using System.Security;
 
 namespace SteamGamesNet
 {
@@ -29,7 +29,7 @@ namespace SteamGamesNet
             }
             catch (FormatException ex)
             {
-                throw new ArgumentException("Invalid file path specified. Unable to extract Steam ID.", ex);
+                throw new FormatException("Invalid file path specified. Unable to extract Steam ID.", ex);
             }
         }
 
@@ -37,12 +37,12 @@ namespace SteamGamesNet
         {
             try
             {
-                string steamInstallationPath = (string)Registry.GetValue(SteamRegistryPath, "InstallPath", null);
+                string steamInstallationPath = GetSteamRegistryInstallPath();
                 return !string.IsNullOrEmpty(steamInstallationPath);
             }
             catch (SecurityException ex)
             {
-                throw new Exception("Access to the registry key is denied. Please run this application with elevated privileges.", ex);
+                throw new SecurityException("Access to the registry key is denied. Please run this application with elevated privileges.", ex);
             }
             catch (Exception ex)
             {

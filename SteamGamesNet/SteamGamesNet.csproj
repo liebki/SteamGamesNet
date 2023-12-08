@@ -15,9 +15,9 @@
     <PackageTags>steam, games, crawler, valve, gaming</PackageTags>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <Version>0.0.4</Version>
+    <Version>0.0.5</Version>
     <Title>SteamGamesNet</Title>
-    <PackageReleaseNotes>Renamed asynchronous methods for clarity, Added GetActiveDownloadedGames() and GetActiveDownloadedGamesWithInfoAsync() methods, Introduced SteamFilesWithSignatures() method, Upgraded Newtonsoft.Json to version 13.0.3.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added new types for the new GetAppListAsync() method, this allows to get all id's and names of apps listed on steam, also changed the names of a few methods or added the async suffix and changed all lists to ienumerables.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

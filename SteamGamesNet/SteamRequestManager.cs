@@ -6,7 +6,8 @@ namespace SteamGamesNet
     internal static class SteamRequestManager
     {
         private const string SteamApiUrl = "https://store.steampowered.com/api/appdetails/?";
-        private static string HttpUserAgent = "Mozilla/5.0 (Windows; U; Windows NT 10.0; en-US; Valve Steam GameOverlay/1639697812; ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36";
+        private const string SteamApiGetAppListUrl = "https://api.steampowered.com/ISteamApps/GetAppList/v0002/";
+        private static string HttpUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; Valve Steam GameOverlay/1701289036) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36";
         private static readonly HttpClient HttpClient = new();
 
         internal static async Task<RawSteamGame> GetAppDataAsync(int steamappid, string language = "", string useragent = "")
@@ -35,6 +36,23 @@ namespace SteamGamesNet
             }
 
             return gameData;
+        }
+
+        internal static async Task<AppListContainer> GetAppList()
+        {
+            string jsonResponse = await QuerySteamAsync(SteamApiGetAppListUrl, HttpUserAgent);
+            AppListContainer appListContainer = null;
+
+            try
+            {
+                appListContainer = JsonConvert.DeserializeObject<AppListContainer>(jsonResponse);
+            }
+            catch (Exception)
+            {
+                throw new Exception($"Could not load the applist from steam api!");
+            }
+
+            return appListContainer;
         }
 
         private static async Task<string> QuerySteamAsync(string url, string useragent = "")

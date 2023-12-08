@@ -24,7 +24,12 @@ namespace SteamGamesNet
             return await SteamRequestManager.GetAppDataAsync(steamappid, Lang_, Useragent_);
         }
 
-        public int[] GetActiveDownloadedGames(string CustomPath = "")
+        public async Task<AppListContainer> GetAppListAsync()
+        {
+            return await SteamRequestManager.GetAppList();
+        }
+
+        public int[] GetAllDownloadingGames(string CustomPath = "")
         {
             Utils.CheckIfWindows();
             string SteamInstallationPath = SteamDirectoryPathSelection(CustomPath);
@@ -33,7 +38,7 @@ namespace SteamGamesNet
             return SteamRequestManager.GetActiveDownloadedGames(SteamInstallationPath);
         }
 
-        public async Task<List<RawSteamGame>> GetActiveDownloadedGamesWithInfoAsync(string CustomPath = "")
+        public async Task<IEnumerable<RawSteamGame>> GetAllDownloadingGamesWithDataAsync(string CustomPath = "")
         {
             Utils.CheckIfWindows();
             string SteamInstallationPath = SteamDirectoryPathSelection(CustomPath);
@@ -42,7 +47,7 @@ namespace SteamGamesNet
             return await SteamRequestManager.GetActiveDownloadedGamesWithInfoAsync(SteamInstallationPath);
         }
 
-        public async Task<List<SteamSignatureValue>> SteamFilesWithSignatures(string CustomPath = "")
+        public async Task<IEnumerable<SteamSignatureValue>> SteamFilesWithSignaturesAsync(string CustomPath = "")
         {
             string SteamInstallationPath = SteamDirectoryPathSelection(CustomPath);
             return await SteamRequestManager.SteamFilesWithSignatures(SteamInstallationPath);

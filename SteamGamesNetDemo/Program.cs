@@ -9,9 +9,16 @@ namespace SteamGamesNetDemo
         {
             SteamGamesClient SteamClient = new();
 
+            #region Get all steam app id's and names 
+
+            AppListContainer appListContainer = await SteamClient.GetAppListAsync();
+
+            #endregion Get all steam app id's and names 
+
+
             #region Get the content of the steam.signatures file as List<SteamSignatureValue> containing HashAlgorithm, HashValue, FilePath, CrcValue and DIGEST
 
-            List<SteamSignatureValue> signatureValues = await SteamClient.SteamFilesWithSignatures();
+            IEnumerable<SteamSignatureValue> signatureValues = await SteamClient.SteamFilesWithSignaturesAsync();
             foreach (SteamSignatureValue signatureItem in signatureValues)
             {
                 if (signatureItem.IsDigestValue)
@@ -29,7 +36,7 @@ namespace SteamGamesNetDemo
 
             #region Get all id's of games that are currently downloading or updating
 
-            foreach (int dapp in SteamClient.GetActiveDownloadedGames())
+            foreach (int dapp in SteamClient.GetAllDownloadingGames())
             {
                 Console.WriteLine(dapp);
             }
@@ -39,7 +46,7 @@ namespace SteamGamesNetDemo
 
             #region Get all games as RawSteamGame's that are currently downloading or updating
 
-            List<RawSteamGame> ActiveDownloadingSteamappsWithInfo = await SteamClient.GetActiveDownloadedGamesWithInfoAsync();
+            IEnumerable<RawSteamGame> ActiveDownloadingSteamappsWithInfo = await SteamClient.GetAllDownloadingGamesWithDataAsync();
             foreach (RawSteamGame game in ActiveDownloadingSteamappsWithInfo)
             {
                 Console.WriteLine(game.Data.ToString());
@@ -55,7 +62,7 @@ namespace SteamGamesNetDemo
 
             if (ExampleApp != null)
             {
-                Console.WriteLine("Example output:");
+                Console.WriteLine("Output:");
                 Console.WriteLine(ExampleApp.Data.ToString());
             }
             else
