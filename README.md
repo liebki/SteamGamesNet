@@ -18,75 +18,7 @@ SteamGamesNet is available as a Nuget package. You can download it from here: [S
 
 ## Example 🔧
 
-#### Constructor parameters for optional changes
-You can optionally provide language and user-agent information while instantiating the SteamGamesClient object as shown below:
-
-``` SteamGamesClient(string language = "", string useragent = "") ```
-
-#### Get the content of the steam.signatures file as object
-The SteamFilesWithSignatures() method gives back a List<SteamSignatureValue>, containing HashValues, Filepaths etc.
-``` SteamFilesWithSignatures() ```
-
-```
-List<SteamSignatureValue> signatureValues = await SteamClient.SteamFilesWithSignatures();
-```
-
-
-#### Get all games that are currently downloading or updating
-The GetActiveDownloadedGames() or GetActiveDownloadedGamesWithInfoAsync() methods give you a list of app id's or a list of RawSteamGame-objects
-``` GetActiveDownloadedGames() ```
-``` GetActiveDownloadedGamesWithInfoAsync() ```
-
-```
-int[] ActiveDownloadingSteamappsWithoutInfo in SteamClient.GetActiveDownloadedGames()
-
-List<RawSteamGame> ActiveDownloadingSteamappsWithInfo = await SteamClient.GetActiveDownloadedGamesWithInfoAsync();
-```
-
-
-#### Get all installed steamapps on the device (Windows only)
-The GetAllSteamGameIds() method is used to get all installed Steam apps on the device (Windows only). 
-Here is an example:
-
-``` GetAllSteamGameIds() ```
-
-```
-SteamGamesClient SgC = new();
-int[] SteamIdList = SgC.GetAllSteamGameIds();
-
-if (SteamIdList.Length > 0)
-{
-    SteamIdList.ToList().ForEach(SteamGameId => Console.WriteLine(SteamGameId));
-}
-else
-{
-    Console.WriteLine("No games found on this device");
-}
-```
-
-#### Get data of an app, using the app id
-The GetAppData() method is used to get app data using an app ID. 
-Here is an example:
-
-``` GetAppData() ```
-
-```
-SteamGamesClient SgC = new();
-int ExampleSteamAppId = 787790;
-
-int ExampleCorruptSteamAppId = 899998;
-RawSteamGame ExampleApp = SgC.GetAppData(ExampleSteamAppId);
-
-if (ExampleApp != null)
-{
-    Console.WriteLine("Example output:");
-    Console.WriteLine(ExampleApp.Data.ToString());
-}
-else
-{
-    Console.WriteLine("This app obviously doesn't exist, the id is wrong or something else is not working correctly!");
-}
-```
+For examples on how to use the wrapper, please open the demo-project.
 
 
 ## License 📜
