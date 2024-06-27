@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -15,9 +15,9 @@
     <PackageTags>steam, games, crawler, valve, gaming</PackageTags>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <Version>0.0.5</Version>
+    <Version>0.0.6</Version>
     <Title>SteamGamesNet</Title>
-    <PackageReleaseNotes>Added new types for the new GetAppListAsync() method, this allows to get all id's and names of apps listed on steam, also changed the names of a few methods or added the async suffix and changed all lists to ienumerables.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added MacOS support for GetAllSteamGameIds() and GetAllDownloadingGames*(), upgraded to .NET 8, renamed background stuff also updated the README.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

@@ -10,11 +10,11 @@ namespace SteamGamesNet
     {
         private const string SteamRegistryPath = @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Valve\Steam";
 
-        internal static void CheckIfWindows()
+        internal static void CheckOS()
         {
-            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                throw new PlatformNotSupportedException("This function is only supported on Windows.");
+                throw new PlatformNotSupportedException("This function is not supported on Linux.");
             }
         }
 

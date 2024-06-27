@@ -10,14 +10,14 @@ namespace SteamGamesNetDemo
             SteamGamesClient SteamClient = new();
 
             #region Get all steam app id's and names 
-
+            
             AppListContainer appListContainer = await SteamClient.GetAppListAsync();
-
+            
             #endregion Get all steam app id's and names 
-
-
+            
+            
             #region Get the content of the steam.signatures file as List<SteamSignatureValue> containing HashAlgorithm, HashValue, FilePath, CrcValue and DIGEST
-
+            
             IEnumerable<SteamSignatureValue> signatureValues = await SteamClient.SteamFilesWithSignaturesAsync();
             foreach (SteamSignatureValue signatureItem in signatureValues)
             {
@@ -30,17 +30,17 @@ namespace SteamGamesNetDemo
                     Console.WriteLine(signatureItem.ToString());
                 }
             }
-
+            
             #endregion Get the content of the steam.signatures file as List<SteamSignatureValue> containing HashAlgorithm, HashValue, FilePath, CrcValue and DIGEST
-
-
+            
+            
             #region Get all id's of games that are currently downloading or updating
-
+            
             foreach (int dapp in SteamClient.GetAllDownloadingGames())
             {
                 Console.WriteLine(dapp);
             }
-
+            
             #endregion Get all id's of games that are currently downloading or updating
 
 
@@ -56,10 +56,10 @@ namespace SteamGamesNetDemo
 
 
             #region Query data by using a steamappid, get a RawSteamGame as result (if existing)
-
+            
             int ExampleSteamAppId = 787790;
             RawSteamGame ExampleApp = await SteamClient.GetAppDataAsync(ExampleSteamAppId);
-
+            
             if (ExampleApp != null)
             {
                 Console.WriteLine("Output:");
@@ -69,7 +69,7 @@ namespace SteamGamesNetDemo
             {
                 Console.WriteLine("This app obviously doesn't exist, the id is wrong or something else is not working correctly!");
             }
-
+            
             #endregion Query data by using a steamappid, get a RawSteamGame as result (if existing)
 
 

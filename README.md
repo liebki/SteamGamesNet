@@ -1,24 +1,62 @@
 ﻿# SteamGamesNet
-A wrapper, to get all (possible) informations about apps/games using the ID, which will be supplied as RawSteamGame to easily access data without parsing.
+A wrapper, to get all (possible) informations about apps/games using the ID, which will be supplied as RawSteamGame-object for easy access to informations.
 
 
 ## Technologies used
 
-SteamGamesNet was created using .NET Core 6.0 and relies on the following Nuget packages and dependencies:
+SteamGamesNet was created using .NET Core 8.0 and relies on:
 - [Newtonsoft.Json](https://www.nuget.org/packages/Newtonsoft.Json/)
 
 
 ## Features ⭐
 
 ### Nuget
-SteamGamesNet is available as a Nuget package. You can download it from here: [SteamGamesNet](https://www.nuget.org/packages/SteamGamesNet)
+SteamGamesNet is available as a Nuget package, get it at: [SteamGamesNet](https://www.nuget.org/packages/SteamGamesNet)
 
 
 ## Usage
 
 ## Example 🔧
 
-For examples on how to use the wrapper, please open the demo-project.
+For examples on how to use the wrapper, open the demo-project.
+
+### Available Methods
+
+- **GetAppListAsync**
+  - Retrieves all Steam app IDs and names.
+  - ```csharp
+    AppListContainer appListContainer = await SteamClient.GetAppListAsync();
+    ```
+
+- **SteamFilesWithSignaturesAsync**
+  - Retrieves the content of the steam.signatures file as a list of `SteamSignatureValue` containing HashAlgorithm, HashValue, FilePath, CrcValue, and DIGEST.
+  - ```csharp
+    IEnumerable<SteamSignatureValue> signatureValues = await SteamClient.SteamFilesWithSignaturesAsync();
+    ```
+
+- **GetAllDownloadingGames**
+  - Retrieves the IDs of games that are currently downloading or updating.
+  - ```csharp
+    int[] SteamIdList = SteamClient.GetAllDownloadingGames()
+    ```
+
+- **GetAllDownloadingGamesWithDataAsync**
+  - Retrieves all games that are currently downloading or updating as `RawSteamGame`.
+  - ```csharp
+    IEnumerable<RawSteamGame> ActiveDownloadingSteamappsWithInfo = await SteamClient.GetAllDownloadingGamesWithDataAsync();
+    ```
+
+- **GetAppDataAsync**
+  - Retrieves data of a specific game using its Steam App ID, returning a `RawSteamGame` if it exists.
+  - ```csharp
+    RawSteamGame ExampleApp = await SteamClient.GetAppDataAsync(787790);
+    ```
+
+- **GetAllSteamGameIds**
+  - Retrieves all Steam app IDs that are currently on the device.
+  - ```csharp
+    int[] SteamIdList = SteamClient.GetAllSteamGameIds();
+    ```
 
 
 ## License 📜
